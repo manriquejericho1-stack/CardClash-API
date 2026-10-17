@@ -4,11 +4,15 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const db = queryInterface.sequelize;
 
-    // Helper: find an existing record using a unique identifying field.
-    // If it does not exist, insert it and return the new record.
+    // ============================================================
+    // HELPER
+    // ============================================================
+
     async function findOrInsert(table, column, value, row) {
       const [existing] = await db.query(
-        `SELECT * FROM "${table}" WHERE "${column}" = :value LIMIT 1`,
+        `SELECT * FROM "${table}"
+         WHERE "${column}" = :value
+         LIMIT 1`,
         {
           replacements: { value },
           type: Sequelize.QueryTypes.SELECT,
@@ -22,7 +26,9 @@ module.exports = {
       await queryInterface.bulkInsert(table, [row]);
 
       const [created] = await db.query(
-        `SELECT * FROM "${table}" WHERE "${column}" = :value LIMIT 1`,
+        `SELECT * FROM "${table}"
+         WHERE "${column}" = :value
+         LIMIT 1`,
         {
           replacements: { value },
           type: Sequelize.QueryTypes.SELECT,
@@ -32,40 +38,42 @@ module.exports = {
       return created;
     }
 
-    /*
-     * ============================================================
-     * 1. FIND USERS CREATED BY demo-users
-     * ============================================================
-     */
+    // ============================================================
+    // 1. FIND USERS CREATED BY demo-users
+    // ============================================================
 
     const [player1] = await db.query(
-      `SELECT * FROM "users" WHERE "school_id" = :school_id`,
+      `SELECT * FROM "users"
+       WHERE "school_id" = '20990001'
+       LIMIT 1`,
       {
-        replacements: { school_id: '20990001' },
         type: Sequelize.QueryTypes.SELECT,
       }
     );
 
     const [player2] = await db.query(
-      `SELECT * FROM "users" WHERE "school_id" = :school_id`,
+      `SELECT * FROM "users"
+       WHERE "school_id" = '20990002'
+       LIMIT 1`,
       {
-        replacements: { school_id: '20990002' },
         type: Sequelize.QueryTypes.SELECT,
       }
     );
 
     const [player3] = await db.query(
-      `SELECT * FROM "users" WHERE "school_id" = :school_id`,
+      `SELECT * FROM "users"
+       WHERE "school_id" = '20990003'
+       LIMIT 1`,
       {
-        replacements: { school_id: '20990003' },
         type: Sequelize.QueryTypes.SELECT,
       }
     );
 
     const [player4] = await db.query(
-      `SELECT * FROM "users" WHERE "school_id" = :school_id`,
+      `SELECT * FROM "users"
+       WHERE "school_id" = '20990004'
+       LIMIT 1`,
       {
-        replacements: { school_id: '20990004' },
         type: Sequelize.QueryTypes.SELECT,
       }
     );
@@ -76,11 +84,9 @@ module.exports = {
       );
     }
 
-    /*
-     * ============================================================
-     * 2. QUESTION SET
-     * ============================================================
-     */
+    // ============================================================
+    // 2. QUESTION SET
+    // ============================================================
 
     const questionSet = await findOrInsert(
       'question_sets',
@@ -94,11 +100,9 @@ module.exports = {
       }
     );
 
-    /*
-     * ============================================================
-     * 3. POWER CARD
-     * ============================================================
-     */
+    // ============================================================
+    // 3. POWER CARD
+    // ============================================================
 
     const powerCard = await findOrInsert(
       'power_cards',
@@ -107,16 +111,16 @@ module.exports = {
       {
         name: 'Second Chance',
         type: 'REVIVAL',
-        description: 'Allows a participant to recover from elimination.',
-        effect: 'Recover one failed participant through a revival challenge.',
+        description:
+          'Allows a participant to recover from elimination.',
+        effect:
+          'Recover one failed participant through a revival challenge.',
       }
     );
 
-    /*
-     * ============================================================
-     * 4. QUESTIONS
-     * ============================================================
-     */
+    // ============================================================
+    // 4. QUESTIONS
+    // ============================================================
 
     const questionData = [
       {
@@ -155,11 +159,9 @@ module.exports = {
       questions.push(question);
     }
 
-    /*
-     * ============================================================
-     * 5. CHOICES
-     * ============================================================
-     */
+    // ============================================================
+    // 5. CHOICES
+    // ============================================================
 
     const choiceData = [
       {
@@ -240,11 +242,9 @@ module.exports = {
       }
     }
 
-    /*
-     * ============================================================
-     * 6. QUESTION CARDS
-     * ============================================================
-     */
+    // ============================================================
+    // 6. QUESTION CARDS
+    // ============================================================
 
     const questionCards = [];
 
@@ -289,11 +289,9 @@ module.exports = {
       }
     }
 
-    /*
-     * ============================================================
-     * 7. FINISHED GAME SESSION
-     * ============================================================
-     */
+    // ============================================================
+    // 7. FINISHED GAME SESSION
+    // ============================================================
 
     const game = await findOrInsert(
       'game_sessions',
@@ -309,11 +307,9 @@ module.exports = {
       }
     );
 
-    /*
-     * ============================================================
-     * 8. SEATS
-     * ============================================================
-     */
+    // ============================================================
+    // 8. SEATS
+    // ============================================================
 
     const seatUsers = [
       {
@@ -381,29 +377,31 @@ module.exports = {
       }
     }
 
-    /*
-     * ============================================================
-     * 9. PLAYERS
-     * ============================================================
-     */
+    // ============================================================
+    // 9. PLAYERS
+    // ============================================================
 
     const playerData = [
       {
+        user_id: player1.user_id,
         nickname: 'Demo Player One',
         token: 'demo-token-player-1',
         status: 'COMPLETED',
       },
       {
+        user_id: player2.user_id,
         nickname: 'Demo Player Two',
         token: 'demo-token-player-2',
         status: 'COMPLETED',
       },
       {
+        user_id: player3.user_id,
         nickname: 'Demo Player Three',
         token: 'demo-token-player-3',
         status: 'COMPLETED',
       },
       {
+        user_id: player4.user_id,
         nickname: 'Demo Player Four',
         token: 'demo-token-player-4',
         status: 'LEFT_EARLY',
@@ -455,11 +453,9 @@ module.exports = {
       }
     }
 
-    /*
-     * ============================================================
-     * 10. PARTICIPANTS
-     * ============================================================
-     */
+    // ============================================================
+    // 10. PARTICIPANTS
+    // ============================================================
 
     const participantData = [
       {
@@ -541,11 +537,9 @@ module.exports = {
       }
     }
 
-    /*
-     * ============================================================
-     * 11. PARTICIPANT MEMBERS
-     * ============================================================
-     */
+    // ============================================================
+    // 11. PARTICIPANT MEMBERS
+    // ============================================================
 
     for (let i = 0; i < participants.length; i++) {
       const [existing] = await db.query(
@@ -572,11 +566,9 @@ module.exports = {
       }
     }
 
-    /*
-     * ============================================================
-     * 12. DECKS
-     * ============================================================
-     */
+    // ============================================================
+    // 12. DECKS
+    // ============================================================
 
     const decks = [];
 
@@ -619,11 +611,9 @@ module.exports = {
       }
     }
 
-    /*
-     * ============================================================
-     * 13. CARDS
-     * ============================================================
-     */
+    // ============================================================
+    // 13. CARDS
+    // ============================================================
 
     const cards = [];
 
@@ -650,7 +640,8 @@ module.exports = {
             card_type: 'QUESTION',
             position: 1,
             status: 'AVAILABLE',
-            question_card_id: questionCards[i % questionCards.length].id,
+            question_card_id:
+              questionCards[i % questionCards.length].id,
             power_card_id: null,
           },
         ]);
@@ -671,11 +662,9 @@ module.exports = {
       }
     }
 
-    /*
-     * ============================================================
-     * 14. PARTICIPANT POWER CARD
-     * ============================================================
-     */
+    // ============================================================
+    // 14. PARTICIPANT POWER CARD
+    // ============================================================
 
     const [existingPowerCard] = await db.query(
       `SELECT * FROM "participant_power_cards"
@@ -703,11 +692,9 @@ module.exports = {
       ]);
     }
 
-    /*
-     * ============================================================
-     * 15. ANSWERS
-     * ============================================================
-     */
+    // ============================================================
+    // 15. ANSWERS
+    // ============================================================
 
     const answerData = [
       {
@@ -774,11 +761,9 @@ module.exports = {
       }
     }
 
-    /*
-     * ============================================================
-     * 16. AID REQUEST
-     * ============================================================
-     */
+    // ============================================================
+    // 16. AID REQUEST
+    // ============================================================
 
     const [existingAid] = await db.query(
       `SELECT * FROM "aid_requests"
@@ -820,11 +805,9 @@ module.exports = {
       );
     }
 
-    /*
-     * ============================================================
-     * 17. REVIVAL
-     * ============================================================
-     */
+    // ============================================================
+    // 17. REVIVAL
+    // ============================================================
 
     const [existingRevival] = await db.query(
       `SELECT * FROM "revivals"
@@ -869,11 +852,9 @@ module.exports = {
       );
     }
 
-    /*
-     * ============================================================
-     * 18. COMEBACK CHALLENGE
-     * ============================================================
-     */
+    // ============================================================
+    // 18. COMEBACK CHALLENGE
+    // ============================================================
 
     const [existingChallenge] = await db.query(
       `SELECT * FROM "comeback_challenges"
@@ -918,11 +899,9 @@ module.exports = {
       );
     }
 
-    /*
-     * ============================================================
-     * 19. COMEBACK CARD
-     * ============================================================
-     */
+    // ============================================================
+    // 19. COMEBACK CARD
+    // ============================================================
 
     const [existingComebackCard] = await db.query(
       `SELECT * FROM "comeback_cards"
@@ -947,11 +926,9 @@ module.exports = {
       ]);
     }
 
-    /*
-     * ============================================================
-     * 20. GAME RESULTS
-     * ============================================================
-     */
+    // ============================================================
+    // 20. GAME RESULTS
+    // ============================================================
 
     const resultData = [
       {
@@ -1025,7 +1002,9 @@ module.exports = {
       }
     }
 
-    console.log('Card Clash demo finished game seeded successfully.');
+    console.log(
+      'Card Clash demo finished game seeded successfully.'
+    );
   },
 
   async down(queryInterface, Sequelize) {
@@ -1044,7 +1023,10 @@ module.exports = {
       return;
     }
 
-    // Delete children first because of foreign-key relationships.
+    // ============================================================
+    // DELETE CHILDREN FIRST
+    // ============================================================
+
     await queryInterface.bulkDelete('game_results', {
       session_id: game.id,
     });
@@ -1064,7 +1046,8 @@ module.exports = {
     await queryInterface.bulkDelete('participant_members', {
       participant_id: {
         [Sequelize.Op.in]: Sequelize.literal(
-          `(SELECT id FROM participants WHERE session_id = ${game.id})`
+          `(SELECT id FROM participants
+            WHERE session_id = ${game.id})`
         ),
       },
     });
@@ -1072,7 +1055,8 @@ module.exports = {
     await queryInterface.bulkDelete('participant_power_cards', {
       participant_id: {
         [Sequelize.Op.in]: Sequelize.literal(
-          `(SELECT id FROM participants WHERE session_id = ${game.id})`
+          `(SELECT id FROM participants
+            WHERE session_id = ${game.id})`
         ),
       },
     });
@@ -1080,8 +1064,10 @@ module.exports = {
     await queryInterface.bulkDelete('cards', {
       deck_id: {
         [Sequelize.Op.in]: Sequelize.literal(
-          `(SELECT id FROM decks WHERE participant_id IN
-            (SELECT id FROM participants WHERE session_id = ${game.id}))`
+          `(SELECT id FROM decks
+            WHERE participant_id IN
+            (SELECT id FROM participants
+             WHERE session_id = ${game.id}))`
         ),
       },
     });
@@ -1089,7 +1075,8 @@ module.exports = {
     await queryInterface.bulkDelete('decks', {
       participant_id: {
         [Sequelize.Op.in]: Sequelize.literal(
-          `(SELECT id FROM participants WHERE session_id = ${game.id})`
+          `(SELECT id FROM participants
+            WHERE session_id = ${game.id})`
         ),
       },
     });

@@ -60,11 +60,30 @@ Base URL: `http://localhost:3001/api/v1`
 
 ## What "completed" means in my game
 
-[One or two sentences: when does a player count as having completed a game? For example: "A player completed the game when they answered every question, even if some answers were wrong or timed out."]
+A player is considered to have completed the game when their final game result has a status of `COMPLETED`. Players who leave early or do not finish the game are not considered completed.
 
 ## Tables
 
-[List your tables, one line each, in the order of your migrations.]
+1. `users` — Stores player and host accounts.
+2. `question_sets` — Stores sets of questions used in games.
+3. `power_cards` — Stores the available power cards and their effects.
+4. `questions` — Stores questions belonging to question sets.
+5. `game_sessions` — Stores game sessions, join codes, modes, and game status.
+6. `seat` — Stores the seats assigned to users in a game session.
+7. `players` — Stores players participating in a game session.
+8. `participants` — Stores the game participants, their score, HP, and status.
+9. `choices` — Stores the answer choices for questions.
+10. `question_cards` — Stores question cards and their point values.
+11. `decks` — Stores the card decks assigned to participants.
+12. `participant_members` — Links players to their game participants.
+13. `cards` — Stores cards belonging to participant decks.
+14. `participant_power_cards` — Stores power cards acquired by participants.
+15. `answers` — Stores player answers, correctness, points earned, and HP changes.
+16. `aid_requests` — Stores requests for assistance between participants.
+17. `revivals` — Stores revival attempts and their results.
+18. `comeback_challenges` — Stores challenges created during revival/comeback situations.
+19. `comeback_cards` — Stores the question cards used in comeback challenges.
+20. `game_results` — Stores the final results of participants after a game ends.
 
 ## Database scripts
 
