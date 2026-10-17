@@ -1,7 +1,7 @@
 {
-  "name": "your-game-api",
+  "name": "CardClash-API",
   "version": "1.0.0",
-  "description": "CHANGE_ME - one sentence about your game (CS 313 Software Engineering 1)",
+  "description": "Card Clash is a tournament-based multiplayer card game API that manages players, games, questions, decks, power cards, revivals, and game results.",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -19,7 +19,7 @@
   "engines": {
     "node": ">=22"
   },
-  "author": "CHANGE_ME - your full name",
+  "author": "Jericho Manrique",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^18.0.7",
