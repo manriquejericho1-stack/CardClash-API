@@ -3,64 +3,56 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('users', {
-      id: {
+      user_id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
         autoIncrement: true,
-        allowNull: false,
+        primaryKey: true,
       },
 
       school_id: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
       full_name: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
       email: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
       role: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn('NOW'),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
 
     await queryInterface.addConstraint('users', {
+      fields: ['email'],
       type: 'unique',
       name: 'uq_users_email',
-      fields: ['email'],
     });
 
-    await queryInterface.sequelize.query(`
-      ALTER TABLE users
-      ADD CONSTRAINT ck_users_role
-      CHECK (role IN ('PLAYER', 'HOST', 'ADMIN'));
-    `);
+    await queryInterface.addConstraint('users', {
+      fields: ['role'],
+      type: 'check',
+      name: 'ck_users_role',
+      where: {
+        role: ['PLAYER', 'HOST', 'ADMIN'],
+      },
+    });
   },
 
   async down(queryInterface) {
-    await queryInterface.sequelize.query(`
-      ALTER TABLE users
-      DROP CONSTRAINT IF EXISTS ck_users_role;
-    `);
-
-    await queryInterface.removeConstraint(
-      'users',
-      'uq_users_email'
-    );
-
     await queryInterface.dropTable('users');
   },
 };
